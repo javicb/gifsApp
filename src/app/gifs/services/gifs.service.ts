@@ -14,7 +14,20 @@ export class GifsService {
   constructor() { }
 
   buscarGifs(busqueda: string): void {
-    this.historial.unshift(busqueda);
+
+    busqueda = busqueda.trim().toLowerCase();
+
+    if (busqueda.trim().length === 0) {
+      return;
+    }
+
+    // No incluimos repetidos
+    if (!this.historial.includes(busqueda)) {
+      this.historial.unshift(busqueda);
+      // Solo mostramos 10 resultados
+      this.historial = this.historial.splice(0, 10);
+    }
+
     console.log(this.historial);
   }
 
