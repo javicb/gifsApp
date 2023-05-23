@@ -13,8 +13,31 @@ export class GifsService {
     return [...this._tagsHistory];
   }
 
-  searchTag( tag: string ) {
+  /**
+   * organizeHistory
+   * @param tag param to add to the history
+   */
+  private organizeHistory(tag: string) {
+    tag = tag.toLowerCase();
+
+    if (this._tagsHistory.includes(tag) ) {
+      this._tagsHistory = this._tagsHistory.filter( oldTag => oldTag !== tag );
+    }
+
     this._tagsHistory.unshift( tag );
-    console.log(this.tagsHistory);
+    this._tagsHistory = this._tagsHistory.splice(0, 10);
+  }
+
+  /**
+   * searchTag
+   * * Add a tag to the history
+   * @param tag param to add to the history
+   */
+  searchTag( tag: string ) {
+    if ( tag.trim().length === 0 ) {
+      return;
+    }
+
+    this.organizeHistory(tag);
   }
 }
