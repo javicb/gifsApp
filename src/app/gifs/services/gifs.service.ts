@@ -1,4 +1,6 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
@@ -6,8 +8,9 @@ import { Injectable } from '@angular/core';
 export class GifsService {
 
   private _tagsHistory: string[] = [];
+  private apiKey = environment.giphy_api;
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   get tagsHistory(): string[] {
     return [...this._tagsHistory];
@@ -15,6 +18,7 @@ export class GifsService {
 
   /**
    * organizeHistory
+   * * Organize the search history of tags
    * @param tag param to add to the history
    */
   private organizeHistory(tag: string) {
@@ -30,14 +34,25 @@ export class GifsService {
 
   /**
    * searchTag
-   * * Add a tag to the history
+   * * Search for GIFs based on the provided tag
    * @param tag param to add to the history
    */
-  searchTag( tag: string ) {
+  searchTag( tag: string ) : void {
     if ( tag.trim().length === 0 ) {
       return;
     }
 
     this.organizeHistory(tag);
+
+    const params = new HttpParams()
+      .set('api_key', this.apiKey)
+      .set('q', tag)
+      .set('limit', '10');
+
+    this.http.get(`${environment.baseUrl}/search`, { params })
+      .subscribe( (resp: any) => {
+        console.log(resp.data);
+      }
+    );
   }
 }
