@@ -1,5 +1,5 @@
 export const environment = {
-  roduction: true,
+  production: false,
   baseUrl: 'https://api.giphy.com/v1/gifs',
   giphy_api: ''
 };
